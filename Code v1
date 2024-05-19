@@ -1,0 +1,71 @@
+import RPi.GPIO as GPIO
+import time
+import subprocess
+from pad4pi import rpi_gpio
+
+# Set up GPIO
+RING_PIN = 18  # GPIO pin connected to the ring signal
+BUTTON_PIN = 23  # GPIO pin connected to the button
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(RING_PIN, GPIO.OUT)
+GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+# Setup Keypad
+KEYPAD = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    ["*", 0, "#"]
+]
+
+ROW_PINS = [4, 14, 15, 17]  # BCM numbering
+COL_PINS = [27, 22, 10]  # BCM numbering
+
+# Initialize keypad
+factory = rpi_gpio.KeypadFactory()
+keypad = factory.create_keypad(keypad=KEYPAD, row_pins=ROW_PINS, col_pins=COL_PINS)
+
+# Define audio files for each number
+AUDIO_MAP = {
+    1: "audio1.mp3",
+    2: "audio2.mp3",
+    # Add more mappings as needed
+}
+
+# Function to play audio clip
+def play_audio(audio_file):
+    subprocess.Popen(['omxplayer', audio_file])
+
+# Function to stop audio clip
+def stop_audio():
+    subprocess.Popen(['killall', 'omxplayer'])
+
+# Function to handle button press
+def button_pressed(channel):
+    print("Button pressed")
+    stop_audio()
+
+# Function to handle keypad press
+def keypad_pressed(key):
+    print("Key pressed:", key)
+    audio_file = AUDIO_MAP.get(key)
+    if audio_file:
+        play_audio(audio_file)
+
+# Add event listener for button press
+GPIO.add_event_detect(BUTTON_PIN, GPIO.FALLING, callback=button_pressed, bouncetime=300)
+
+# Add event listener for keypad press
+keypad.registerKeyPressHandler(keypad_pressed)
+
+try:
+    while True:
+        # Simulate phone ringing
+        print("Phone is ringing...")
+        GPIO.output(RING_PIN, GPIO.HIGH)
+        time.sleep(10)  # Ring for 10 seconds
+        GPIO.output(RING_PIN, GPIO.LOW)
+        time.sleep(270)  # Wait for 5 minutes before next ring
+
+except KeyboardInterrupt:
+    GPIO.cleanup()
