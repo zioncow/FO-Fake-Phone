@@ -1,0 +1,13 @@
+Sure, here's a summary of what needs to be done with the modified code to make it compatible with the AML-S905X Libre Computer Board:
+
+1. **Identify the GPIO Library**: Research and find the GPIO library that is compatible with the AML-S905X Libre Computer Board. This may involve checking the board's documentation, forums, or community resources.
+
+2. **Replace RPi.GPIO Import**: Replace the `import RPi.GPIO as GPIO` line with the appropriate import statement for the GPIO library compatible with the Libre board.
+
+3. **Adjust GPIO Pin Numbers**: Replace the GPIO pin numbers (`RING_PIN`, `BUTTON_PIN`, `ROW_PINS`, `COL_PINS`) with the actual GPIO pin numbers corresponding to the ring signal, button, row pins, and column pins on the AML-S905X Libre Computer Board.
+
+4. **Make Necessary Modifications**: If the GPIO library for the Libre board has different functions or syntax than RPi.GPIO, make any necessary modifications to the code to ensure compatibility.
+
+5. **Test the Code**: Once the modifications are made, test the code on the AML-S905X Libre Computer Board to ensure that it operates as expected and interacts correctly with the GPIO pins.
+
+By following these steps, you can adapt the provided code to work with the GPIO pins on the AML-S905X Libre Computer Board.
