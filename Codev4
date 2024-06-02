@@ -1,0 +1,75 @@
+import time
+import pygame.mixer
+
+# Initialize Pygame mixer
+pygame.mixer.init()
+
+# Define audio files
+RINGING_SOUND = "ringing.wav"
+MESSAGE_SOUND = "message.wav"
+DIAL_TONE_SOUND = "dial_tone.wav"
+
+# Define specific phone numbers and their corresponding audio tracks
+PHONE_NUMBERS = {
+    "12345": "audio_track1.wav",
+    "67890": "audio_track2.wav",
+    # Add more phone numbers and audio tracks as needed
+}
+
+# Function to play audio track
+def play_audio_track(audio_track):
+    sound = pygame.mixer.Sound(audio_track)
+    sound.play()
+
+# Function to stop audio playback
+def stop_audio():
+    pygame.mixer.stop()
+
+# Function to check if the phone is on the receiver
+def is_on_receiver():
+    # Implement logic to check if the phone is on the receiver
+    return False
+
+# Function to simulate button press (pickup call)
+def pickup_call():
+    # Implement logic to detect button press to pick up the call
+    return False
+
+# Function to simulate keypad input (entering phone numbers)
+def input_phone_number():
+    # Implement logic to accept keypad input for phone numbers
+    return None
+
+# Main function
+def main():
+    while True:
+        # Ring the phone every 5 minutes
+        print("Ringing...")
+        play_audio_track(RINGING_SOUND)
+        time.sleep(10)  # Ring for 10 seconds
+
+        # Check if the call is picked up
+        if pickup_call():
+            print("Call picked up.")
+            stop_audio()
+            play_audio_track(MESSAGE_SOUND)
+            while not is_on_receiver():
+                time.sleep(1)  # Wait for the call to end
+        else:
+            print("Dial tone.")
+            stop_audio()
+            play_audio_track(DIAL_TONE_SOUND)
+            while not pickup_call():
+                time.sleep(1)  # Wait for the call to be picked up
+
+        # Simulate entering phone numbers
+        phone_number = input_phone_number()
+        if phone_number in PHONE_NUMBERS:
+            print(f"Playing audio track for {phone_number}.")
+            play_audio_track(PHONE_NUMBERS[phone_number])
+            while not is_on_receiver():
+                time.sleep(1)  # Wait for the call to end
+
+# Execute the main function
+if __name__ == "__main__":
+    main()
