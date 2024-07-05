@@ -1,0 +1,75 @@
+import pygame
+import sys
+import time
+import subprocess
+import RPi.GPIO as GPIO
+from pad4pi import rpi_gpio
+import board
+import busio
+import sdcardio
+import storage
+
+# Set up GPIO
+RING_PIN = 21  # GPIO pin connected to the ring signal
+BUTTON_PIN = 28  # GPIO pin connected to the button
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(RING_PIN, GPIO.OUT)
+GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+# Setup Keypad
+KEYPAD = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    ["*", 0, "#"]
+]
+
+ROW_PINS = [3, 4, 5, 6]  # GPIO pin numbers for rows
+COL_PINS = [0, 1, 4]  # GPIO pin numbers for columns
+
+# Initialize keypad
+factory = rpi_gpio.KeypadFactory()
+keypad = factory.create_keypad(keypad=KEYPAD, row_pins=ROW_PINS, col_pins=COL_PINS)
+
+# Initialize pygame and mixer
+pygame.init()
+pygame.mixer.init()
+
+# Define audio files
+RINGING_SOUND = "ringing.wav"
+MESSAGE_SOUND = "message.wav"
+DIAL_TONE_SOUND = "dial_tone.wav"
+
+# Define specific phone numbers and their corresponding audio tracks
+PHONE_NUMBERS = {
+    "12345": "audio_track1.wav",
+    "67890": "audio_track2.wav",
+    # Add more phone numbers and audio tracks as needed
+}
+
+# Function to play audio track
+def play_audio_track(audio_track):
+    sound = pygame.mixer.Sound(audio_track)
+    sound.play()
+
+# Function to stop audio playback
+def stop_audio():
+    pygame.mixer.stop()
+
+# Function to check if the phone is on the receiver
+def is_on_receiver():
+    # Implement logic to check if the phone is on the receiver
+    return False
+
+# Function to simulate button press (pickup call)
+def pickup_call():
+    # Implement logic to detect button press to pick up the call
+    return False
+
+# Function to simulate keypad input (entering phone numbers)
+def input_phone_number():
+    # Implement logic to accept keypad input for phone numbers
+    return None
+
+# Function to mount SD card
+def mount_sd_card():
